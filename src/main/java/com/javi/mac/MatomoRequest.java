@@ -36,12 +36,15 @@ public class MatomoRequest {
 
         var sortedDates = new ArrayList<>(dates);
         sortedDates.sort(Comparator.naturalOrder());
+        System.out.println(dates);
+        System.out.println(sortedDates);
+
 
         if (period == PeriodEnum.RANGE && sortedDates.size() >= 2) {
 
             // Caso RANGE: Necesita al menos dos fechas (inicio y fin) y que sea un rango
-            LocalDate startDate = dates.get(0);
-            LocalDate endDate = dates.get(dates.size() - 1);
+            LocalDate startDate = sortedDates.get(0);
+            LocalDate endDate = sortedDates.get(dates.size() - 1);
             // Formato: YYYY-MM-DD,YYYY-MM-DD
             dateString = startDate.format(MATOMO_DATE_FORMATTER) + "," + endDate.format(MATOMO_DATE_FORMATTER);
 

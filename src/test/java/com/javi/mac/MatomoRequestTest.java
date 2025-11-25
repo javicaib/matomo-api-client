@@ -81,9 +81,13 @@ class MatomoRequestTest {
     @Test
     void testConstructor_RangePeriod_UnorderedDates() {
         // Las fechas deben ordenarse automáticamente
+        // Debería tomar solo la primera y la última fecha
         List<LocalDate> dates = Arrays.asList(
-                LocalDate.of(2023, 10, 15),
-                LocalDate.of(2023, 10, 1)
+                LocalDate.of(2023, 10, 17),
+                LocalDate.of(2023, 10, 18),
+                LocalDate.of(2023, 10, 1),
+                LocalDate.of(2023, 10, 5),
+                LocalDate.of(2023, 11, 6)
         );
 
         MatomoRequest request = new MatomoRequest(
@@ -94,12 +98,12 @@ class MatomoRequestTest {
                 null
         );
 
-        assertEquals("2023-10-01,2023-10-15", request.getDate());
+        assertEquals("2023-10-01,2023-11-06", request.getDate());
     }
 
     @Test
     void testConstructor_RangePeriod_MoreThanTwoDates() {
-        // Debería tomar solo las dos primeras después de ordenar
+        // Debería tomar solo la primera y la última fecha
         List<LocalDate> dates = Arrays.asList(
                 LocalDate.of(2023, 10, 20),
                 LocalDate.of(2023, 10, 5),
