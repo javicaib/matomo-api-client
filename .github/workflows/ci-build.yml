@@ -2,8 +2,7 @@ name: Java CI con Gradle y Build JAR
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
