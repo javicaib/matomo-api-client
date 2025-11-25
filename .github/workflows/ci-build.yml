@@ -1,48 +1,35 @@
 name: Java CI con Gradle y Build JAR
 
 on:
-  # Disparar el workflow en cada push a la rama principal/master
   push:
-    branches: [ "main", "master" ]
-  # Permite ejecutar manualmente
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
-    # Ejecutar en una máquina virtual de Ubuntu
     runs-on: ubuntu-latest
 
     steps:
       - name: 📦 Checkout del Código
         # Trae el código del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.0
 
       - name: ☕ Configurar Java 17 (Ajusta la versión si es necesario)
         # Instala la versión de Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5.0.0
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle' # Configura el caché para dependencias de Gradle
+          cache: 'gradle'
 
-      - name: 📄 Conceder Permisos al Wrapper de Gradle
-        # Es necesario para que el script 'gradlew' pueda ejecutarse en Linux/Unix
-        run: chmod +x gradlew
+      - name: 📄 configurar Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
-      - name: 🔨 Compilar, Probar y Empaquetar con Gradle
-        # El task 'build' de Gradle limpia, compila, ejecuta tests y genera el JAR
-        run: ./gradlew build -x test
+      - name: Build with Gradle
+        run: ./gradlew build
 
-      # Opcional: Si quieres ejecutar los tests en un paso separado:
-      # - name: 🧪 Ejecutar Tests Unitarios
-      #   run: ./gradlew test
-
-      - name: 💾 Subir el Archivo JAR Resultante
-        # Sube el JAR como un "artifact" para que puedas descargarlo.
-        # El JAR se encuentra típicamente en build/libs/
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-app-jar
-          # Busca cualquier archivo JAR dentro del directorio 'build/libs/'
-          path: build/libs/*.jar
-          retention-days: 7
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
