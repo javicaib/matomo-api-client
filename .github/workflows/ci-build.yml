@@ -8,28 +8,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Define permisos necesarios para escribir artifacts y usar GITHUB_TOKEN
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: 📦 Checkout del Código
-        # Trae el código del repositorio
-        uses: actions/checkout@v6.0.0
+        uses: actions/checkout@v4 # Usar v4 es más estándar y estable
 
-      - name: ☕ Configurar Java 17 (Ajusta la versión si es necesario)
-        # Instala la versión de Java
-        uses: actions/setup-java@v5.0.0
+      - name: ☕ Configurar Java 17
+        uses: actions/setup-java@v4 # Usar v4 es más estándar
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 📄 configurar Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+      - name: 📄 Conceder Permisos al Wrapper de Gradle
+        # ¡ESTE ES EL PASO CRUCIAL QUE FALTABA!
+        # Necesario en los runners de Linux para poder ejecutar el script 'gradlew'.
+        run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: 🛠️ Configurar Gradle
+        # Esta acción ya maneja el caché y la configuración del entorno.
+        uses: gradle/actions/setup-gradle@v3 # Usar la última versión estable (v3)
+
+      - name: 🔨 Build con Gradle (Compila y ejecuta Tests)
         run: ./gradlew build
 
-      - name: Publish to GitHub Packages
+      # --- PASOS PARA PUBLICAR (OPCIONAL) ---
+      # (Solo si tu proyecto está configurado para publicar en el archivo build.gradle)
+
+      - name: ⬆️ Publish to GitHub Packages
+        # Asegúrate de que el 'publishing' block en tu build.gradle use las credenciales USERNAME y TOKEN.
         run: ./gradlew publish
         env:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # --- PASO PARA SUBIR EL ARTEFACTO (JAR) ---
+
+      - name: 💾 Subir el Archivo JAR como Artifact
+        # Esto permite descargar el JAR compilado desde la interfaz de GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-jar
+          path: build/libs/*.jar
