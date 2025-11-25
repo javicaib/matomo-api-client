@@ -61,10 +61,6 @@ public class MatomoClient {
         );
     }
 
-    // ----------------------------------------------------------------------
-    // Patrón Builder
-    // ----------------------------------------------------------------------
-
     public static Builder builder() {
         return new Builder();
     }
