@@ -22,6 +22,27 @@ public class DevicesDetectionModule {
         return client.execute(
                 new MatomoRequest(BASE_METHOD + "getBrowsers", siteId, period, date, extraParams),
                 new TypeReference<>() {
-        });
+                });
+    }
+
+    public Result<List<DevicesDetection.GetModel>, String> getModel(Integer siteId, PeriodEnum period, List<LocalDate> date, Map<String, String> extraParams) {
+        return client.execute(
+                new MatomoRequest(BASE_METHOD + "getModel", siteId, period, date, extraParams),
+                new TypeReference<>() {
+                });
+    }
+
+    public Result<List<DevicesDetection.GetOsFamilies>, String> getOsFamilies(Integer siteId, PeriodEnum period, List<LocalDate> date, Map<String, String> extraParams) {
+        return client.execute(
+                new MatomoRequest(BASE_METHOD + "getOsFamilies", siteId, period, date, extraParams),
+                new TypeReference<>() {
+                });
+    }
+
+    public Result<List<DevicesDetection.GetType>, String> getType(Integer siteId, PeriodEnum period, List<LocalDate> date, Map<String, String> extraParams) {
+        return client.execute(
+                new MatomoRequest(BASE_METHOD + "getType", siteId, period, date, extraParams),
+                new TypeReference<>() {
+                });
     }
 }

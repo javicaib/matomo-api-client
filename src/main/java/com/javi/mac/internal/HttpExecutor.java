@@ -11,10 +11,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class HttpExecutor {
-
-    private final Logger log = Logger.getLogger(HttpExecutor.class.getName());
     private final OkHttpClient client = new OkHttpClient();
-
+    private static final Logger log = Logger.getLogger(HttpExecutor.class.getName());
     private static final Map<String, String> defaultQueryParams = Map.of(
             "format", "JSON",
             "module", "API",
@@ -38,7 +36,7 @@ public class HttpExecutor {
             Map<String, String> params,
             String tokenAuth,
             Integer matomoVersion,
-            TypeReference<T> typeReference // <--- Argumento clave
+            TypeReference<T> typeReference
     ) {
 
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl + "/index.php")).newBuilder();
@@ -50,7 +48,7 @@ public class HttpExecutor {
 
         // Lógica de construcción de Request (GET vs POST)
         if (matomoVersion > 4) {
-            // POST para Matomo v5+
+            // POST para Matomo v5
             FormBody.Builder formBuilder = new FormBody.Builder();
             allParams.forEach(formBuilder::add);
             formBuilder.add("token_auth", tokenAuth);
@@ -62,7 +60,7 @@ public class HttpExecutor {
                     .url(urlBuilder.build())
                     .build();
         } else {
-            // GET para Matomo v4-
+            // GET para Matomo v4
             allParams.put("token_auth", tokenAuth);
             allParams.forEach(urlBuilder::addQueryParameter);
 
@@ -71,7 +69,8 @@ public class HttpExecutor {
                     .build();
         }
 
-        log.info("Executing request: " + request.url());
+        var logMessage = "GET request URL: " + request.url();
+        log.fine(logMessage);
 
         try (Response response = client.newCall(request).execute()) {
 
@@ -97,7 +96,7 @@ public class HttpExecutor {
                 return new Result.Success<>(parseResult.getSuccessValue());
             } else {
                 // Error de JSON parsing (e.g., el JSON no concuerda con la estructura T)
-                return new Result.Failure<>(parseResult.getError());
+                return new Result.Failure<>(parseResult.getFailureError());
             }
 
         } catch (IOException e) {

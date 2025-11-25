@@ -32,27 +32,21 @@ public class MatomoRequest {
         if (period == PeriodEnum.RANGE && dates.size() < 2) {
             throw new IllegalArgumentException("Range period requires at least two dates");
         }
-        String dateString;
 
+        String dateString;
         var sortedDates = new ArrayList<>(dates);
         sortedDates.sort(Comparator.naturalOrder());
-        System.out.println(dates);
-        System.out.println(sortedDates);
-
 
         if (period == PeriodEnum.RANGE && sortedDates.size() >= 2) {
-
             // Caso RANGE: Necesita al menos dos fechas (inicio y fin) y que sea un rango
             LocalDate startDate = sortedDates.get(0);
             LocalDate endDate = sortedDates.get(dates.size() - 1);
             // Formato: YYYY-MM-DD,YYYY-MM-DD
             dateString = startDate.format(MATOMO_DATE_FORMATTER) + "," + endDate.format(MATOMO_DATE_FORMATTER);
 
-
         } else {
             // Caso No-RANGE (DAY, WEEK, MONTH, YEAR): Necesita toma la primera una fecha
             LocalDate firstDate = sortedDates.get(0);
-
             dateString = firstDate.format(MATOMO_DATE_FORMATTER);
         }
 

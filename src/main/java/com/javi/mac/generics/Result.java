@@ -16,7 +16,7 @@ public sealed interface Result<T, E> {
         return this instanceof Failure;
     }
 
-    default E getError() {
+    default E getFailureError() {
         return ((Failure<T, E>) this).error();
     }
 
