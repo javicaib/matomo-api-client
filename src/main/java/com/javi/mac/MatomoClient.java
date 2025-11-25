@@ -37,10 +37,6 @@ public class MatomoClient {
         return new DevicesDetectionModule(this);
     }
 
-    // ----------------------------------------------------------------------
-    // Métodos de Ejecución (Core de la Comunicación)
-    // ----------------------------------------------------------------------
-
     /**
      * Ejecuta una solicitud a la API de Matomo para tipos GENÉRICOS (ej: List<T>, Map<K, V>).
      *
