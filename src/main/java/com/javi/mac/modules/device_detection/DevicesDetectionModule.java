@@ -17,7 +17,9 @@ public class DevicesDetectionModule {
     public DevicesDetectionModule(MatomoClient client) {
         this.client = client;
     }
+    /* Module DevicesDetection
 
+    * */
     public Result<List<DevicesDetection.GetBrowsers>, String> getBrowsers(Integer siteId, PeriodEnum period, List<LocalDate> date, Map<String, String> extraParams) {
         return client.execute(
                 new MatomoRequest(BASE_METHOD + "getBrowsers", siteId, period, date, extraParams),

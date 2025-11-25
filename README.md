@@ -2,6 +2,8 @@
 
 **Una librería Java ligera y con tipos para interactuar fácilmente con la API de Matomo (Analytics).**
 
+[Read in English](readme/README.en.md)
+
 -----
 
 ## 📚 Tabla de Contenidos
