@@ -50,7 +50,6 @@ public class MatomoRequest {
             // Caso No-RANGE (DAY, WEEK, MONTH, YEAR): Necesita toma la primera una fecha
             LocalDate firstDate = sortedDates.get(0);
 
-            // Formato: YYYY-MM-DD
             dateString = firstDate.format(MATOMO_DATE_FORMATTER);
         }
 
